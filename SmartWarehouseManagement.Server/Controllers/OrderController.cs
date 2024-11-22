@@ -48,7 +48,7 @@ namespace SmartWarehouseManagement.Server.Controllers
             return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id) {
 
             Order orderToDelete = _dbContext.Orders.Find(id) ?? 

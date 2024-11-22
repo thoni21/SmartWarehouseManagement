@@ -53,5 +53,15 @@ namespace SmartWarehouseManagement.Server.Controllers
             _dbContext.SaveChanges();
             return CreatedAtAction(nameof(GetOrderItem), new { id = orderItem.Id }, orderItem);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteOrderItem(int id) {
+            OrderItem orderItemToDelete = _dbContext.OrderItems.Find(id) ?? 
+                throw new InvalidOperationException("No OrdeItem with id: " + id + " exists.");
+
+            _dbContext.OrderItems.Remove(orderItemToDelete);
+            _dbContext.SaveChanges();
+            return NoContent();
+        }
     }
 }
