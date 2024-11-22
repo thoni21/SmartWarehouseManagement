@@ -16,20 +16,34 @@ namespace SmartWarehouseManagement.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Order>> GetOrders() { 
+        public ActionResult<IEnumerable<Order>> GetOrders() {
             return _dbContext.Orders.ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Order> GetOrder(int id)
         {
-            return _dbContext.Orders.Find(id) ?? 
+            return _dbContext.Orders.Find(id) ??
                 throw new InvalidOperationException("No item with an id of " + id + " exists");
         }
 
         [HttpPost]
-        public ActionResult<Order> PostOrder(Order order) { 
+        public ActionResult<Order> PostOrder(Order order) {
             _dbContext.Orders.Add(order);
+            _dbContext.SaveChanges();
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult EditShipmentStatus(int id, Order order) { 
+            if(id != order.Id)
+            {
+                throw new InvalidOperationException("Id mismatch");
+            }
+            Order orderToEdit = _dbContext.Orders.Find(id) ??
+                throw new InvalidOperationException("No item with an id of " + id + " exists");
+
+            orderToEdit.Shipped = order.Shipped;
             _dbContext.SaveChanges();
             return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
         }
