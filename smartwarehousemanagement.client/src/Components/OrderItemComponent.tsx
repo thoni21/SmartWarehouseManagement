@@ -49,7 +49,7 @@ const OrderItem: React.FC<OrderItemProps> = ({
                 </select>
             </div>
             <div>
-                <p className="ms-3">{selectedItem?.price ?? "0"}</p>
+                <span className="ms-3">{selectedItem?.price ?? "0"}</span>
             </div>
         </div>
     );

@@ -2,10 +2,28 @@ export type Item = {
     id: number;
     name: string;
     price: number;
-    weight_in_kg: string;
+    weightInKg: string;
     size: string;
     shelf: string;
-    shelf_position: string;
+    shelfPosition: string;
     category: string;
-    quantity_in_stock: number;
+    quantityInStock: number;
+}
+
+export type Order = {
+    id: number;
+    customer: string; 
+    orderNr: string;
+    orderDate?: Date; 
+    price?: number; 
+    shipped: boolean; 
+    cancelled: boolean; 
+};
+
+export type OrderItem = {
+    id: number;
+    order: Order;
+    item: Item | null;
+    quantity: number;
+    price: number;
 }
