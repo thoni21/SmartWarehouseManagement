@@ -2,7 +2,7 @@ import LogoutLink from "../Components/LogoutLink.tsx";
 import AuthorizeView, { AuthorizedUser } from "../Components/AuthorizeView.tsx";
 
 
-function Home() {
+function HomePage() {
 
     return (
         <AuthorizeView>
@@ -10,6 +10,9 @@ function Home() {
                 <h1>Home Page</h1>
                 <a href="/order">
                     <button className="mt-3">Order Page</button>
+                </a>
+                <a href="/shipping">
+                    <button className="mt-3">Shipping Page</button>
                 </a>
                 <span className="mt-3">
                     <LogoutLink>
@@ -21,4 +24,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default HomePage;

@@ -15,6 +15,7 @@ function OrderPage() {
     ]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
+
     useEffect(() => {
         fetch("https://localhost:7013/inventory/Item")
             .then((response) => response.json())
@@ -48,6 +49,7 @@ function OrderPage() {
 
 
     const handlePurchase = async (orderItems: OrderItemType[]) => {
+        
         orderItems.forEach((orderItem) => {
             if ((orderItem.selectedItem?.quantityInStock ?? 0) < orderItem.quantity) {
                 throw new Error("Not enough items left in stock");
@@ -58,7 +60,7 @@ function OrderPage() {
         //TODO add actual email of user, generate orderNr
         const exampleOrder: Order = {
             id: 0,
-            customer: "testUser" ,
+            customer: "email",
             orderNr: "ORD12345",
             shipped: false,
             cancelled: false,

@@ -27,3 +27,17 @@ export type OrderItem = {
     quantity: number;
     price: number;
 }
+
+export type User = {
+    email: string;
+}
+
+export type Shipment = {
+    id: number;
+    order: Order;
+    dateOfShipment: Date;
+    weightOfShipment: number;
+    sizeOfShipment?: string;
+    carrier?: string;
+    trackingNumber?: string;
+};

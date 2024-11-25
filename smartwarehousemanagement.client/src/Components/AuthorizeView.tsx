@@ -1,13 +1,9 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { Navigate } from 'react-router-dom';
+import { User } from '../Types';
 
 
 const UserContext = createContext({});
-
-interface User {
-    email: string;
-}
-
 
 function AuthorizeView(props: { children: React.ReactNode }) {
 
@@ -89,7 +85,9 @@ function AuthorizeView(props: { children: React.ReactNode }) {
         if (authorized && !loading) {
             return (
                 <>
-                    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+                    <UserContext.Provider value={user}>
+                        {props.children}
+                    </UserContext.Provider>
                 </>
             );
         } else {
