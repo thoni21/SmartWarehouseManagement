@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWarehouseManagement.Server", "SmartWarehouseManagement.Server\SmartWarehouseManagement.Server.csproj", "{04642B02-5545-4196-AF26-35950C783AFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartWarehouseManagement.Server", "SmartWarehouseManagement.Server\SmartWarehouseManagement.Server.csproj", "{04642B02-5545-4196-AF26-35950C783AFF}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "smartwarehousemanagement.client", "smartwarehousemanagement.client\smartwarehousemanagement.client.esproj", "{8B66540F-5FFB-4936-890F-1B93D8725E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWarehouseManager.Tests", "SmartWarehouseManager.Tests\SmartWarehouseManager.Tests.csproj", "{2EA8253D-D81D-451F-9A2B-C098DD9501DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{8B66540F-5FFB-4936-890F-1B93D8725E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B66540F-5FFB-4936-890F-1B93D8725E66}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B66540F-5FFB-4936-890F-1B93D8725E66}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2EA8253D-D81D-451F-9A2B-C098DD9501DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA8253D-D81D-451F-9A2B-C098DD9501DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA8253D-D81D-451F-9A2B-C098DD9501DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA8253D-D81D-451F-9A2B-C098DD9501DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
