@@ -49,7 +49,6 @@ function OrderContent() {
         console.log(orderItems);
     };
 
-    //pass user email
     const handlePurchase = async (orderItems: OrderItemType[]) => {
         
         orderItems.forEach((orderItem) => {
@@ -59,7 +58,7 @@ function OrderContent() {
             setTotalPrice((prev) => { return prev + (orderItem.selectedItem?.price ?? 0)  })
         });
 
-        //TODO add actual email of user, generate orderNr
+        //TODO generate orderNr
         const exampleOrder: Order = {
             id: 0,
             customer: user.email,

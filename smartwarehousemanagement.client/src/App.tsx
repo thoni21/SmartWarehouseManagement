@@ -6,6 +6,7 @@ import Login from './Pages/Login.tsx';
 import Register from './Pages/Register.tsx';
 import OrderPage from './Pages/OrderPage.tsx';
 import ShippingPage from './Pages/ShippingPage.tsx';
+import ViewOrdersPage from './Pages/ViewOrdersPage.tsx';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/order" element={<OrderPage />} />
                 <Route path="/shipping" element={<ShippingPage />} />
+                <Route path="/view/orders" element={<ViewOrdersPage />} />
             </Routes>
         </BrowserRouter>
     );

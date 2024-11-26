@@ -30,6 +30,24 @@ namespace SmartWarehouseManagement.Server.Controllers
                                         ?? throw new InvalidOperationException("No OrdeItem with id: " + id + " exists."); 
         }
 
+        [HttpGet("{orderId}/items")]
+        public ActionResult<IEnumerable<OrderItem>> GetOrderItemsByOrderId(int orderId)
+        {
+            var orderItems = _dbContext.OrderItems
+                                       .Include(oi => oi.Order)
+                                       .Include(oi => oi.Item)
+                                       .Where(oi => oi.Order.Id == orderId)
+                                       .ToList();
+
+            if (orderItems == null || !orderItems.Any())
+            {
+                throw new InvalidOperationException($"No OrderItems found for OrderId: {orderId}");
+            }
+
+            return Ok(orderItems);
+        }
+
+
         [HttpPost]
         public ActionResult<OrderItem> PostOrderItem(OrderItem orderItem)
         {

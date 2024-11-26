@@ -13,6 +13,9 @@ function HomePage() {
                 <a href="/shipping">
                     <button className="mt-3">Shipping Page</button>
                 </a>
+                <a href="/view/orders">
+                    <button className="mt-3">View Orders Page</button>
+                </a>
                 <span className="mt-3">
                     <LogoutLink>
                         Logout <AuthorizedUser value="email" />
