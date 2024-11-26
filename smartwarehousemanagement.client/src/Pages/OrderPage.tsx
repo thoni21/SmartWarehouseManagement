@@ -49,6 +49,13 @@ function OrderContent() {
         console.log(orderItems);
     };
 
+    const handleRemoveItem = (index: number) => {
+        setOrderItems((prevItems) => {
+            const newOrderItems = prevItems.filter((_, i) => i !== index);
+            return newOrderItems;
+        });
+    };
+
     const handlePurchase = async (orderItems: OrderItemType[]) => {
         
         orderItems.forEach((orderItem) => {
@@ -128,6 +135,7 @@ function OrderContent() {
                     items={items}
                     onQuantityChange={(value) => handleQuantityChange(index, value)}
                     onItemChange={(item) => handleItemChange(index, item)}
+                    onRemove={() => { handleRemoveItem(index) }}
                 />
             ))}
 

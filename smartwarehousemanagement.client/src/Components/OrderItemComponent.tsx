@@ -7,6 +7,7 @@ interface OrderItemProps {
     items: Item[] | null;
     onQuantityChange: (value: number) => void;
     onItemChange: (item: Item | null) => void;
+    onRemove: () => void;
 }
 
 const OrderItem: React.FC<OrderItemProps> = ({
@@ -15,6 +16,7 @@ const OrderItem: React.FC<OrderItemProps> = ({
     items,
     onQuantityChange,
     onItemChange,
+    onRemove,
 }) => {
     return (
         <div className="d-flex align-items-center justify-content-center">
@@ -51,6 +53,20 @@ const OrderItem: React.FC<OrderItemProps> = ({
             <div>
                 <span className="ms-3">{selectedItem?.price ?? "0"}</span>
             </div>
+            <button
+                onClick={onRemove}
+                style={{
+                    background: "none",
+                    color: "red",
+                    border: "none",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    padding: "0",
+                }}
+                className="ms-3"
+            >
+                X
+            </button>
         </div>
     );
 };
