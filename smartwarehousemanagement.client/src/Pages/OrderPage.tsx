@@ -2,19 +2,21 @@ import { useState, useEffect } from "react";
 import { Item, Order, OrderItem } from "../Types";
 import OrderItemComponent from "../Components/OrderItemComponent";
 import AuthorizeView from "../Components/AuthorizeView";
+import { useUserContext } from "../context";
 
 interface OrderItemType {
     selectedItem: Item | null;
     quantity: number;
 }
 
-function OrderPage() {
+function OrderContent() {
     const [items, setItems] = useState<Item[] | null>(null);
     const [orderItems, setOrderItems] = useState<OrderItemType[]>([
         { selectedItem: null, quantity: 1 },
     ]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
+    const user = useUserContext()
 
     useEffect(() => {
         fetch("https://localhost:7013/inventory/Item")
@@ -47,7 +49,7 @@ function OrderPage() {
         console.log(orderItems);
     };
 
-
+    //pass user email
     const handlePurchase = async (orderItems: OrderItemType[]) => {
         
         orderItems.forEach((orderItem) => {
@@ -60,7 +62,7 @@ function OrderPage() {
         //TODO add actual email of user, generate orderNr
         const exampleOrder: Order = {
             id: 0,
-            customer: "email",
+            customer: user.email,
             orderNr: "ORD12345",
             shipped: false,
             cancelled: false,
@@ -117,7 +119,7 @@ function OrderPage() {
     };
 
     return (
-        <AuthorizeView>
+        <div>
             <h1>Order Page</h1>
             {orderItems.map((orderItem, index) => (
                 <OrderItemComponent
@@ -134,8 +136,16 @@ function OrderPage() {
                 <button onClick={handleAddRowsToBasket}>Add Item</button>
                 <button onClick={() => { handlePurchase(orderItems) }}>Purchase</button>
             </div>
-        </AuthorizeView>
+        </div>
     );
+}
+
+function OrderPage() {
+    return (
+        <AuthorizeView>
+            <OrderContent />
+        </AuthorizeView>
+    )
 }
 
 export default OrderPage;

@@ -1,18 +1,13 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { User } from '../Types';
-
-
-const UserContext = createContext({});
+import { UserContext } from '../context';
 
 function AuthorizeView(props: { children: React.ReactNode }) {
 
     const [authorized, setAuthorized] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true); // add a loading state
-    let emptyuser: User = { email: "" };
-
-    const [user, setUser] = useState(emptyuser);
-
+    const [user, setUser] = useState<User | undefined>(undefined);
 
     useEffect(() => {
         // Get the cookie value
@@ -74,7 +69,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
     }, []);
 
 
-    if (loading) {
+    if (loading || !user) {
         return (
             <>
                 <p>Loading...</p>
@@ -82,7 +77,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
         );
     }
     else {
-        if (authorized && !loading) {
+        if (authorized && !loading ) {
             return (
                 <>
                     <UserContext.Provider value={user}>

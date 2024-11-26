@@ -1,7 +1,6 @@
 import LogoutLink from "../Components/LogoutLink.tsx";
 import AuthorizeView, { AuthorizedUser } from "../Components/AuthorizeView.tsx";
 
-
 function HomePage() {
 
     return (
