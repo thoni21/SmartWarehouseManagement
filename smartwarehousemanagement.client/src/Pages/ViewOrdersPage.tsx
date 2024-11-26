@@ -6,23 +6,21 @@ function ViewOrders(){
 
     const [orderId, setOrderId] = useState<number | null>(null);
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+    const [orderError, setOrderError] = useState<string | null>(null);
 
 
     const getOrderWithId = async () => {
 
-        const response = await fetch(`https://localhost:7013/order/items/OrderItems/${orderId}/items`);
+        try {
+            const response = await fetch(`https://localhost:7013/order/items/OrderItems/${orderId}/items`);
 
-        const order: OrderItem[] = await response.json();
+            const order: OrderItem[] = await response.json();
 
-        if (!order[0].item) {
-            throw new Error("No items in order")
+            setOrderItems(order);
+
+        } catch (error: any) {
+            setOrderError("No items in order")
         }
-
-        if (order.length === 0 || !order[0].item) {
-            throw new Error("No items in order");
-        }
-
-        setOrderItems(order);
     }
 
     return (
@@ -43,6 +41,7 @@ function ViewOrders(){
                         }}
                         required
                     />
+                    {orderError && <small className="text-danger">{orderError}</small>}
                 </div>
                 <div className="mb3">
                     <button onClick={getOrderWithId}>

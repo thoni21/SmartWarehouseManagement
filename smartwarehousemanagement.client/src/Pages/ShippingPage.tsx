@@ -9,6 +9,7 @@ function ShippingPage() {
     const [carrier, setCarrier] = useState<string | undefined>();
     const [trackingNumber, setTrackingNumber] = useState<string | undefined>();
     const [orderError, setOrderError] = useState<string | null>(null);
+    const [confirmationMessage, setConfirmationMessage] = useState<string | null>(null);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -46,11 +47,15 @@ function ShippingPage() {
             if (!shipmentResponse.ok) {
                 throw new Error(`Failed to create shipment: ${shipmentResponse.statusText}`);
             }
+
+            setConfirmationMessage("Shipment has successfully been created.")
+
         } catch (error: any) {
             if (error.message.includes("Order with ID")) {
                 setOrderError(error.message);
             } else {
                 console.error("Error creating shipment:", error);
+                setOrderError("Order has already been shipped.");
             }
         }
     };
@@ -135,11 +140,14 @@ function ShippingPage() {
                             setCarrier(undefined);
                             setTrackingNumber(undefined);
                             setOrderError(null);
+                            setConfirmationMessage("");
                         }}
                     >
                         Reset
                     </button>
+                    <a style={{ color: "green" }}>{confirmationMessage}</a>
                 </form>
+                
             </div>
         </AuthorizeView>
     );

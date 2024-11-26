@@ -37,7 +37,7 @@ namespace SmartWarehouseManagement.Server.Controllers
 
             if (order.Shipped)
             {
-                return BadRequest("Order has already been shipped.");
+                throw new InvalidOperationException("Order has already been shipped.");
             }
 
             order.Shipped = true;
