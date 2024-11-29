@@ -16,9 +16,9 @@ namespace SmartWarehouseManagement.Server.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<Item> Items { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Shipment> Shipments { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<Shipment> Shipments { get; set; }
     }
 }

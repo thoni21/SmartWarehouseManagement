@@ -1,53 +1,139 @@
-﻿using Moq;
-using Microsoft.EntityFrameworkCore;
-using SmartWarehouseManagement.Server.Controllers; 
-using SmartWarehouseManagement.Server.Models;      
+﻿using Microsoft.EntityFrameworkCore;
+using SmartWarehouseManagement.Server.Controllers;
 using SmartWarehouseManagement.Server.Data;
+using SmartWarehouseManagement.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
-[TestFixture]
-public class ItemControllerTests
+
+namespace SmartWarehouseManagement.Tests
 {
-    private Mock<DbSet<Item>> _mockDbSet;
-    private Mock<ApplicationDbContext> _mockDbContext; 
-    private ItemController _controller;        
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class ItemControllerTests
     {
-        _mockDbSet = new Mock<DbSet<Item>>();
-        _mockDbContext = new Mock<ApplicationDbContext>();
+        private ApplicationDbContext _dbContext;
+        private ItemController _controller;
+        private List<Item> _items;
 
-        _mockDbContext.Setup(db => db.Items).Returns(_mockDbSet.Object);
-
-        _controller = new ItemController(_mockDbContext.Object);
-    }
-
-    [Test]
-    public void GetItems_ReturnsAllItems()
-    {
-        // Arrange
-        var testItems = new List<Item>
+        [SetUp]
+        public void SetUp()
         {
-            new Item { Id = 1, Name = "Item1" },
-            new Item { Id = 2, Name = "Item2" },
-        }.AsQueryable();
+            // Configure in-memory database
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDb")
+                .Options;
 
-        _mockDbSet.As<IQueryable<Item>>().Setup(m => m.Provider).Returns(testItems.Provider);
-        _mockDbSet.As<IQueryable<Item>>().Setup(m => m.Expression).Returns(testItems.Expression);
-        _mockDbSet.As<IQueryable<Item>>().Setup(m => m.ElementType).Returns(testItems.ElementType);
-        _mockDbSet.As<IQueryable<Item>>().Setup(m => m.GetEnumerator()).Returns(testItems.GetEnumerator());
+            _dbContext = new ApplicationDbContext(options);
 
-        // Act
-        var result = _controller.GetItems();
+            _items = new List<Item>
+            {
+                new Item { Id = 1, Category = "cat1", Name = "name1", Price = 10, QuantityInStock = 10, Shelf = "A1", ShelfPosition = "11", Size = "L", WeightInKg = 1 },
+                new Item { Id = 2, Category = "cat2", Name = "name2", Price = 20, QuantityInStock = 20, Shelf = "A2", ShelfPosition = "12", Size = "L", WeightInKg = 1 }
+            };
 
-        // Assert
-        Assert.IsInstanceOf<ActionResult<IEnumerable<Item>>>(result);
-        var actionResult = result.Result as OkObjectResult;
-        Assert.IsNotNull(actionResult);
-        var items = actionResult.Value as IEnumerable<Item>;
-        Assert.IsNotNull(items);
-        Assert.AreEqual(2, items.Count());
-        Assert.AreEqual("Item1", items.First().Name);
+            // Seed test data
+            _dbContext.Items.AddRange(_items);
+            _dbContext.SaveChanges();
+
+            // Detach all entities to ensure AsNoTracking behavior in tests
+            foreach (var entity in _dbContext.ChangeTracker.Entries())
+            {
+                entity.State = EntityState.Detached;
+            }
+
+            _controller = new ItemController(_dbContext);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Clean up
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Dispose();
+        }
+
+        [Test]
+        public void GetItems_ReturnsAllItems()
+        {
+            // Act
+            var result = _controller.GetItems();
+
+            // Assert
+            Assert.IsInstanceOf<ActionResult<IEnumerable<Item>>>(result);
+
+            var gottenItems = result.Value.ToList();
+            Assert.That(gottenItems.Count, Is.EqualTo(_items.Count()));
+            Assert.That(gottenItems[0].Name, Is.EqualTo(_items[0].Name));
+            Assert.That(gottenItems[1].Name, Is.EqualTo(_items[1].Name));
+        }
+
+        [Test]
+        public void GetItem_ReturnsItemByID()
+        {
+            // Act
+            var result = _controller.GetItem(1);
+
+            // Assert
+            Assert.IsInstanceOf<ActionResult<Item>>(result);
+
+            var gottenItem = result.Value;
+            Assert.IsNotNull(gottenItem);
+            Assert.That(gottenItem.Id, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void PostItem_AddsItemToDB()
+        {
+            // Arrange
+            Item payload = new Item { Id = 3, Category = "cat3", Name = "name3", Price = 30, QuantityInStock = 30, Shelf = "A3", ShelfPosition = "13", Size = "L", WeightInKg = 1 };
+
+            // Act
+            _controller.PostItem(payload);
+            var result = _controller.GetItem(payload.Id);
+
+            // Assert
+            Assert.IsInstanceOf<ActionResult<Item>>(result);
+
+            var addedItem = result.Value;
+            Assert.IsNotNull(addedItem);
+            Assert.That(addedItem, Is.EqualTo(payload));
+        }
+
+        [Test]
+        public void PutItem_UpdatesItemInDB()
+        {
+            // Arrange
+            Item payload = new Item { Id = 1, Category = "EditedCat1", Name = "Editedname1", Price = 10, QuantityInStock = 10, Shelf = "EditedA1", ShelfPosition = "Edited11", Size = "EditedL", WeightInKg = 1 };
+            Item beforePut = _items.First();
+
+            // Act
+            _controller.PutItem(beforePut.Id, payload);
+            var result = _controller.GetItem(beforePut.Id);
+
+            // Assert
+            Assert.IsInstanceOf<ActionResult<Item>>(result);
+
+            var upatedItem = result.Value;
+            Assert.IsNotNull(upatedItem);
+            Assert.That(upatedItem, Is.EqualTo(payload));
+            Assert.That(upatedItem, Is.Not.EqualTo(beforePut));
+        }
+
+        [Test]
+        public void DeleteItem_DeletesItemFromDB() 
+        {
+            // Arrange
+            int itemToDelete = 1;
+
+            // Act
+            var result = _controller.GetItem(itemToDelete);
+            _controller.DeleteItem(1);
+
+            // Assert
+            Assert.IsInstanceOf<ActionResult<Item>>(result);
+
+            var deletedItem = result.Value;
+            Assert.IsNotNull(deletedItem);
+            Assert.Throws<InvalidOperationException>(() => _controller.GetItem(deletedItem.Id));
+        }
     }
 }
