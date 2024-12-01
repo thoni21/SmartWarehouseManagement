@@ -5,7 +5,7 @@ using SmartWarehouseManagement.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace SmartWarehouseManagement.Tests
+namespace SmartWarehouseManager.Tests
 {
     [TestFixture]
     public class ItemControllerTests

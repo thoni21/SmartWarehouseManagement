@@ -5,7 +5,7 @@ using SmartWarehouseManagement.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace SmartWarehouseManagement.Tests
+namespace SmartWarehouseManager.Tests
 {
     [TestFixture]
     public class OrderControllerTests
@@ -122,11 +122,11 @@ namespace SmartWarehouseManagement.Tests
         public void DeleteOrder_DeletesOrderFromDB()
         {
             // Arrange
-            int OrderToDelete = 1;
+            int orderToDelete = 1;
 
             // Act
-            var result = _controller.GetOrder(OrderToDelete);
-            _controller.DeleteOrder(1);
+            var result = _controller.GetOrder(orderToDelete);
+            _controller.DeleteOrder(orderToDelete);
 
             // Assert
             Assert.IsInstanceOf<ActionResult<Order>>(result);
