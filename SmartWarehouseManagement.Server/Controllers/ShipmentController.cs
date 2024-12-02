@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartWarehouseManagement.Server.Data;
@@ -37,7 +38,7 @@ namespace SmartWarehouseManagement.Server.Controllers
 
             if (order.Shipped)
             {
-                throw new InvalidOperationException("Order has already been shipped.");
+                return BadRequest("Order has already been shipped.");
             }
 
             order.Shipped = true;
