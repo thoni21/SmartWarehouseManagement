@@ -23,8 +23,12 @@ namespace SmartWarehouseManagement.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<Order> GetOrder(int id)
         {
-            return _dbContext.Orders.Find(id) ??
-                throw new InvalidOperationException("No item with an id of " + id + " exists");
+            if (_dbContext.Orders.Find(id) is not Order order)
+            {
+                return BadRequest($"No order with an id of {id} exists");
+            }
+
+            return order;
         }
 
         [HttpPost]
@@ -40,8 +44,11 @@ namespace SmartWarehouseManagement.Server.Controllers
             {
                 throw new InvalidOperationException("Id mismatch");
             }
-            Order orderToEdit = _dbContext.Orders.Find(id) ??
-                throw new InvalidOperationException("No item with an id of " + id + " exists");
+
+            if (_dbContext.Orders.Find(id) is not Order orderToEdit)
+            {
+                return BadRequest($"No order with an id of {id} exists");
+            }
 
             orderToEdit.Shipped = order.Shipped;
             _dbContext.SaveChanges();
@@ -50,9 +57,10 @@ namespace SmartWarehouseManagement.Server.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id) {
-
-            Order orderToDelete = _dbContext.Orders.Find(id) ?? 
-                throw new InvalidOperationException("No item with an id of " + id + " exists");
+            if (_dbContext.Orders.Find(id) is not Order orderToDelete)
+            {
+                return BadRequest($"No order with an id of {id} exists");
+            }            
 
             _dbContext.Orders.Remove(orderToDelete);
             _dbContext.SaveChanges();
