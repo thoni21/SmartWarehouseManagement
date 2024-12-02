@@ -26,8 +26,12 @@ namespace SmartWarehouseManagement.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<Item> GetItem(int id)
         {
-            return _dbContext.Items.Find(id) ?? 
-                throw new InvalidOperationException("No item with an id of " + id + " exists");
+            if (_dbContext.Items.Find(id) is not Item item)
+            {
+                return BadRequest($"No item with an id of {id} exists");
+            }
+
+            return item;
         }
 
         [HttpPost]
@@ -42,7 +46,7 @@ namespace SmartWarehouseManagement.Server.Controllers
             
             if (id != item.Id)
             {
-                throw new Exception("Id's doesn't match");
+                return BadRequest("Id's doesn't match");
             }
 
             _dbContext.Items.Update(item);
@@ -52,8 +56,10 @@ namespace SmartWarehouseManagement.Server.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult DeleteItem(int id) {
-            Item itemToRemove = _dbContext.Items.Find(id) ??
-                throw new InvalidOperationException("No item with an id of " + id + " exists");
+            if (_dbContext.Items.Find(id) is not Item itemToRemove)
+            {
+                return BadRequest($"No item with an id of {id} exists");
+            }
 
             _dbContext.Items.Remove(itemToRemove);
             _dbContext.SaveChanges();
