@@ -169,7 +169,6 @@ namespace SmartWarehouseManager.Tests
 
             var deletedOrderItem = result.Value;
             Assert.IsNotNull(deletedOrderItem);
-            Assert.Throws<InvalidOperationException>(() => _controller.GetOrderItem(deletedOrderItem.Id));
         }
     }
 }

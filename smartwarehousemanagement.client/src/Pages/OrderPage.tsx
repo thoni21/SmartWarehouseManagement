@@ -15,6 +15,7 @@ function OrderContent() {
         { selectedItem: null, quantity: 1 },
     ]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [errorText, setErrorText] = useState<string>("");
 
     const user = useUserContext()
 
@@ -57,15 +58,15 @@ function OrderContent() {
     };
 
     const handlePurchase = async (orderItems: OrderItemType[]) => {
-        
+        setErrorText("")
         orderItems.forEach((orderItem) => {
             if ((orderItem.selectedItem?.quantityInStock ?? 0) < orderItem.quantity) {
-                throw new Error("Not enough items left in stock");
+                setErrorText("Not enough items left in stock of item: " + orderItem.selectedItem?.name);
+                return;
             }
             setTotalPrice((prev) => { return prev + (orderItem.selectedItem?.price ?? 0)  })
         });
 
-        //TODO generate orderNr
         const exampleOrder: Order = {
             id: 0,
             customer: user.email,
@@ -143,6 +144,7 @@ function OrderContent() {
                 <button onClick={handleAddRowsToBasket}>Add Item</button>
                 <button onClick={() => { handlePurchase(orderItems) }}>Purchase</button>
             </div>
+            <a style={{ color: "red" }}>{errorText}</a>
         </div>
     );
 }

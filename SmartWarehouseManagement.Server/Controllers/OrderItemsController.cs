@@ -24,10 +24,17 @@ namespace SmartWarehouseManagement.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<OrderItem> GetOrderItem(int id)
         {
-            return _dbContext.OrderItems.Include(oi => oi.Order)
-                                        .Include(oi => oi.Item) 
-                                        .FirstOrDefault(oi => oi.Id == id) 
-                                        ?? throw new InvalidOperationException("No OrdeItem with id: " + id + " exists."); 
+            var orderItem = _dbContext.OrderItems
+                .Include(oi => oi.Order)
+                .Include(oi => oi.Item)
+                .FirstOrDefault(oi => oi.Id == id);
+
+            if (orderItem == null)
+            {
+                return BadRequest($"No OrderItem with id: {id} exists.");
+            }
+
+            return orderItem;
         }
 
         [HttpGet("{orderId}/items")]
@@ -41,7 +48,7 @@ namespace SmartWarehouseManagement.Server.Controllers
 
             if (orderItems == null || !orderItems.Any())
             {
-                throw new InvalidOperationException($"No OrderItems found for OrderId: {orderId}");
+                return BadRequest($"No OrderItems found for OrderId: {orderId}");
             }
 
             return Ok(orderItems);
@@ -51,11 +58,15 @@ namespace SmartWarehouseManagement.Server.Controllers
         [HttpPost]
         public ActionResult<OrderItem> PostOrderItem(OrderItem orderItem)
         {
-            Order order = _dbContext.Orders.Find(orderItem.Order.Id) ??
-                throw new InvalidOperationException("No order with id: " + orderItem.Order + " exists.");
-
-            Item item = _dbContext.Items.Find(orderItem.Item.Id) ?? 
-                throw new InvalidOperationException("No item with id: " + orderItem.Item + " exists.");
+            if (_dbContext.Orders.Find(orderItem.Order.Id) is not Order order)
+            {
+                return BadRequest($"No order with id: {orderItem.Order.Id} exists.");
+            }
+            
+            if (_dbContext.Items.Find(orderItem.Item.Id) is not Item item)
+            {
+                return BadRequest($"No item with id: {orderItem.Item.Id} exists.");
+            }
 
             orderItem.Order = order;
             orderItem.Item = item;  
@@ -74,8 +85,10 @@ namespace SmartWarehouseManagement.Server.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOrderItem(int id) {
-            OrderItem orderItemToDelete = _dbContext.OrderItems.Find(id) ?? 
-                throw new InvalidOperationException("No OrdeItem with id: " + id + " exists.");
+            if (_dbContext.OrderItems.Find(id) is not OrderItem orderItemToDelete)
+            {
+                return BadRequest($"No OrderItem with id: {id} exists.");
+            }
 
             _dbContext.OrderItems.Remove(orderItemToDelete);
             _dbContext.SaveChanges();
