@@ -62,7 +62,7 @@ function ShippingPage() {
 
     return (
         <AuthorizeView>
-            <div className="d-flex align-items-center justify-content-center">
+            <div className="d-flex flex-column align-items-center justify-content-center">
                 <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "500px" }}>
                     <div className="mb-3">
                         <label htmlFor="order" className="form-label">
@@ -127,7 +127,8 @@ function ShippingPage() {
                             onChange={(e) => setTrackingNumber(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-primary"
+                        onClick={() => { setConfirmationMessage("") }}>
                         Submit
                     </button>
                     <button
@@ -141,13 +142,13 @@ function ShippingPage() {
                             setTrackingNumber(undefined);
                             setOrderError(null);
                             setConfirmationMessage("");
-                        }}
-                    >
+                        }}>
                         Reset
                     </button>
-                    <a style={{ color: "green" }}>{confirmationMessage}</a>
                 </form>
-                
+                <div>
+                    <a style={{ color: "green" }}>{confirmationMessage}</a>
+                </div>
             </div>
         </AuthorizeView>
     );
