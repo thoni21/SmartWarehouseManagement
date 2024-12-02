@@ -125,14 +125,15 @@ namespace SmartWarehouseManager.Tests
             int orderToDelete = 1;
 
             // Act
-            var result = _controller.GetOrder(orderToDelete);
             _controller.DeleteOrder(orderToDelete);
+            var result = _controller.DeleteOrder(orderToDelete);
 
             // Assert
-            Assert.IsInstanceOf<ActionResult<Order>>(result);
+            var badRequestResult = result as BadRequestObjectResult;
+            Assert.IsNotNull(badRequestResult);
 
-            var deletedOrder = result.Value;
-            Assert.IsNotNull(deletedOrder);
+            var expectedMessage = $"No order with an id of {orderToDelete} exists";
+            Assert.That(badRequestResult.Value, Is.EqualTo(expectedMessage));
         }
     }
 }

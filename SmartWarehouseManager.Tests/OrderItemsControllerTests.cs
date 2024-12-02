@@ -158,17 +158,18 @@ namespace SmartWarehouseManager.Tests
         public void DeleteOrderItem_DeletesOrderFromDB()
         {
             // Arrange
-            int OrderItemToDelete = 1;
+            int orderItemToDelete = 1;
 
             // Act
-            var result = _controller.GetOrderItem(OrderItemToDelete);
-            _controller.DeleteOrderItem(OrderItemToDelete);
+            _controller.DeleteOrderItem(orderItemToDelete);
+            var result = _controller.DeleteOrderItem(orderItemToDelete);
 
             // Assert
-            Assert.IsInstanceOf<ActionResult<OrderItem>>(result);
+            var badRequestResult = result as BadRequestObjectResult;
+            Assert.IsNotNull(badRequestResult);
 
-            var deletedOrderItem = result.Value;
-            Assert.IsNotNull(deletedOrderItem);
+            var expectedMessage = $"No OrderItem with id: {orderItemToDelete} exists.";
+            Assert.That(badRequestResult.Value, Is.EqualTo(expectedMessage));
         }
     }
 }

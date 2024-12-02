@@ -30,6 +30,8 @@ namespace SmartWarehouseManager.Tests
             Order order1 = new Order { Id = 1, Customer = "a@a.com", OrderNr = "1234", OrderDate = new DateTime(), Price = 10, Cancelled = false, Shipped = false };
             Order order2 = new Order { Id = 2, Customer = "b@b.com", OrderNr = "4321", OrderDate = new DateTime(), Price = 10, Cancelled = false, Shipped = true };
 
+            List<Order> _orders = new List<Order> { order1, order2 };
+
             _shipments = new List<Shipment>
             {
                 new Shipment { Id = 1, Order = order1, Carrier = "DHL", DateOfShipment = new DateTime(), SizeOfShipment = "L", TrackingNumber = "asd123", WeightOfShipment = 1 },
@@ -38,6 +40,7 @@ namespace SmartWarehouseManager.Tests
 
             // Seed test data
             _dbContext.Shipments.AddRange(_shipments);
+            _dbContext.Orders.AddRange(_orders);
             _dbContext.SaveChanges();
 
             // Detach all entities to ensure AsNoTracking behavior in tests
@@ -134,17 +137,35 @@ namespace SmartWarehouseManager.Tests
         public void DeleteShipment_DeletesShipmentFromDB()
         {
             // Arrange
-            int shipmentToDelete = 1;
+            int shipmentToDelete = 2;
 
             // Act
-            var result = _controller.GetShipment(shipmentToDelete);
             _controller.DeleteShipment(shipmentToDelete);
+            var result = _controller.DeleteShipment(shipmentToDelete);
 
             // Assert
-            Assert.IsInstanceOf<ActionResult<Shipment>>(result);
+            var badRequestResult = result as BadRequestObjectResult;
+            Assert.IsNotNull(badRequestResult);
 
-            var deletedShipment = result.Value;
-            Assert.IsNotNull(deletedShipment);
+            var expectedMessage = $"No shipment with id: {shipmentToDelete} exists.";
+            Assert.That(badRequestResult.Value, Is.EqualTo(expectedMessage));
+        }
+
+        // Test to ensure that delted shipments order.Shipped value is set back to false
+        [Test]
+        public void DeleteShipment_SetsOrderShippedFalse()
+        {
+            // Arrange
+            int shipmentToDelete = 2;
+
+            // Act
+            _controller.DeleteShipment(shipmentToDelete);
+            var resultOrder = _dbContext.Orders.Where(o => o.Id == 2).First();
+
+            // Assert
+            Assert.IsNotNull(resultOrder);
+            
+            Assert.That(resultOrder.Shipped, Is.False);
         }
     }
 }

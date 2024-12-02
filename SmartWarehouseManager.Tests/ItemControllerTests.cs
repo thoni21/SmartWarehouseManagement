@@ -125,14 +125,16 @@ namespace SmartWarehouseManager.Tests
             int itemToDelete = 1;
 
             // Act
-            var result = _controller.GetItem(itemToDelete);
             _controller.DeleteItem(1);
+            var result = _controller.DeleteItem(1);
+
 
             // Assert
-            Assert.IsInstanceOf<ActionResult<Item>>(result);
+            var badRequestResult = result as BadRequestObjectResult;
+            Assert.IsNotNull(badRequestResult);
 
-            var deletedItem = result.Value;
-            Assert.IsNotNull(deletedItem);
+            var expectedMessage = $"No item with an id of {itemToDelete} exists";
+            Assert.That(badRequestResult.Value, Is.EqualTo(expectedMessage));
         }
     }
 }
