@@ -69,7 +69,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
     }, []);
 
 
-    if (loading || !user) {
+    if (loading) {
         return (
             <>
                 <p>Loading...</p>
