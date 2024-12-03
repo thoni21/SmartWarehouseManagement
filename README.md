@@ -17,6 +17,7 @@ The app was made as a small side project to try developing with a React frontend
 - **React** with functional components
 - **TypeScript** for static typing
 - **React Router DOM** for navigation
+- **Vite** for fast development and bundling
 
 ### Database
 - **PostgreSQL** (local setup)
