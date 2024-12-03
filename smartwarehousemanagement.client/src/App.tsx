@@ -7,6 +7,7 @@ import Register from './Pages/Register.tsx';
 import OrderPage from './Pages/OrderPage.tsx';
 import ShippingPage from './Pages/ShippingPage.tsx';
 import ViewOrdersPage from './Pages/ViewOrdersPage.tsx';
+import CreateItemPage from './Pages/CreateItemPage.tsx';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/order" element={<OrderPage />} />
                 <Route path="/shipping" element={<ShippingPage />} />
                 <Route path="/view/orders" element={<ViewOrdersPage />} />
+                <Route path="/item" element={<CreateItemPage />} />
             </Routes>
         </BrowserRouter>
     );

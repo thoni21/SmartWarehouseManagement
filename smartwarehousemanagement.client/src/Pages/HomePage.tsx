@@ -7,6 +7,9 @@ function HomePage() {
         <AuthorizeView>
             <div className="d-flex flex-column align-items-center">
                 <h1>Home Page</h1>
+                <a href="/item">
+                    <button className="mt-3">Create Item Page</button>
+                </a>
                 <a href="/order">
                     <button className="mt-3">Order Page</button>
                 </a>

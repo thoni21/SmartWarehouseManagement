@@ -2,7 +2,7 @@ export type Item = {
     id: number;
     name: string;
     price: number;
-    weightInKg: string;
+    weightInKg: number;
     size: string;
     shelf: string;
     shelfPosition: string;

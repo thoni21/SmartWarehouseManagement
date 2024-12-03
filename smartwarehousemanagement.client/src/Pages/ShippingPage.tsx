@@ -13,51 +13,43 @@ function ShippingPage() {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        
+        const response = await fetch(`https://localhost:7013/orders/Order/${orderId}`);
 
-        try {
-            const response = await fetch(`https://localhost:7013/orders/Order/${orderId}`);
-
-            if (!response.ok) {
-                throw new Error(`Order with ID ${orderId} not found.`);
-            }
-
-            const order: Order = await response.json();
-
-            const shipment: Shipment = {
-                id: 0,
-                order: order,
-                dateOfShipment: new Date(),
-                weightOfShipment: weightOfShipment,
-                carrier: carrier,
-                sizeOfShipment: sizeOfShipment,
-                trackingNumber: trackingNumber,
-            };
-
-            setOrderError(null);
-
-            // Create shipment
-            const shipmentResponse = await fetch("https://localhost:7013/shipment/Shipment", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(shipment),
-            });
-
-            if (!shipmentResponse.ok) {
-                throw new Error(`Failed to create shipment: ${shipmentResponse.statusText}`);
-            }
-
-            setConfirmationMessage("Shipment has successfully been created.")
-
-        } catch (error: any) {
-            if (error.message.includes("Order with ID")) {
-                setOrderError(error.message);
-            } else {
-                console.error("Error creating shipment:", error);
-                setOrderError("Order has already been shipped.");
-            }
+        if (!response.ok) {
+            setOrderError(`Order with ID ${orderId} not found.`);
+            return;
         }
+
+        const order: Order = await response.json();
+
+        const shipment: Shipment = {
+            id: 0,
+            order: order,
+            dateOfShipment: new Date(),
+            weightOfShipment: weightOfShipment,
+            carrier: carrier,
+            sizeOfShipment: sizeOfShipment,
+            trackingNumber: trackingNumber,
+        };
+
+        setOrderError(null);
+
+        // Create shipment
+        const shipmentResponse = await fetch("https://localhost:7013/shipment/Shipment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(shipment),
+        });
+
+        if (!shipmentResponse.ok) {
+            setOrderError(`Failed to create shipment: ${shipmentResponse.statusText}`);
+            return;
+        }
+
+        setConfirmationMessage("Shipment has successfully been created.")
     };
 
     return (
