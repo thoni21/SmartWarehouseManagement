@@ -14,7 +14,7 @@ The app was made as a small side project to try developing with a React frontend
 - **NUnit** for unit testing
 
 ### Frontend
-- **React** with functional components
+- **React.js** with functional components
 - **TypeScript** for static typing
 - **React Router DOM** for navigation
 - **Vite** for fast development and bundling
