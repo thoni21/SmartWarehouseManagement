@@ -145,6 +145,9 @@ function OrderContent() {
                 <button onClick={() => { handlePurchase(orderItems) }}>Purchase</button>
             </div>
             <a style={{ color: "red" }}>{errorText}</a>
+            <a href="/">
+                <button className="mt-3">Home</button>
+            </a>
         </div>
     );
 }

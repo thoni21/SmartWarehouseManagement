@@ -69,6 +69,9 @@ function ViewOrders(){
                         <p>No items found for this order.</p>
                     )}
                 </div>
+                <a href="/">
+                    <button className="mt-3">Home</button>
+                </a>
             </div>
         </AuthorizeView>  
     );

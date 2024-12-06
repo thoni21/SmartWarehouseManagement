@@ -181,6 +181,9 @@ function CreateItemPage() {
                     <button type="submit" className="btn btn-primary">Add Item</button>
                 </form>
                 <a style={{ color: infoTextColor }}>{infoText}</a>
+                <a href="/">
+                    <button className="mt-3">Home</button>
+                </a>
             </div>
         </AuthorizeView>
     );

@@ -141,6 +141,9 @@ function ShippingPage() {
                 <div>
                     <a style={{ color: "green" }}>{confirmationMessage}</a>
                 </div>
+                <a href="/">
+                    <button className="mt-3">Home</button>
+                </a>
             </div>
         </AuthorizeView>
     );
