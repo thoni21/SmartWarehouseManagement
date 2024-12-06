@@ -14,9 +14,52 @@ The app was made as a small side project to try developing with a React frontend
 - **NUnit** for unit testing
 
 ### Frontend
-- **React** with functional components
+- **React.js** with functional components
 - **TypeScript** for static typing
 - **React Router DOM** for navigation
+- **Vite** for fast development and bundling
 
 ### Database
 - **PostgreSQL** (local setup)
+
+<h2>Setup Instructions</h2>
+
+1. **Clone the repository:**
+
+   First, clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/thoni21/SmartWarehouseManagement.git
+   ```
+
+2. **Navigate to the backend folder:**
+
+   Go to the `SmartWarehouseManagement.Server` directory:
+   ```bash
+   cd SmartWarehouseManagement/SmartWarehouseManagement.Server
+   ```
+
+3. **Update the database connection string in `appsettings.json`:**
+
+   Open the `appsettings.json` file and update the connection string to match your local PostgreSQL database setup:
+   ```json
+   {
+       "ConnectionStrings": {
+           "DefaultConnection": "Host=localhost;Port=5432;Username=your_username;Password=your_password;Database=your_database"
+       }
+   }
+   ```
+
+4. **Apply migrations to the database:**
+
+   Run the following command to apply any pending migrations to your database:
+   ```bash
+   dotnet ef database update
+   ```
+
+5. **Run the project:**
+
+   Finally, start the project by using the following command:
+   ```bash
+   dotnet run --launch-profile https
+   ```
+
